@@ -1,0 +1,22 @@
+{
+  "name": "blog_backend",
+  "version": "1.0.0",
+  "description": "blog app backend",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint"
+  },
+  "author": "Pablo Fernándenz <pablofp1988@hotmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "9.9.1",
+    "nodemon": "^3.1.4"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.5.4"
+  }
+}
