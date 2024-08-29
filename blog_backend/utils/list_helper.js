@@ -12,9 +12,14 @@ const totalLikes = (blogs) => {
 const favoriteBlog = (blogs) => {
   if (blogs.length === 0) return null;
 
-  return blogs.reduce((favorite, current) => {
-    return current.likes > favorite.likes ? current : favorite;
-  });
+  const firstBlogWithMaxLikes = blogs.reduce((favBlog, currentBlog) =>
+    favBlog.likes > currentBlog.likes ? favBlog : currentBlog
+  );
+  return {
+    title: firstBlogWithMaxLikes.title,
+    author: firstBlogWithMaxLikes.author,
+    likes: firstBlogWithMaxLikes.likes
+  };
 };
 
 module.exports = {
