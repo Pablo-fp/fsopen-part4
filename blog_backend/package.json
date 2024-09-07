@@ -4,9 +4,8 @@
   "description": "blog app backend",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node index.js",
-    "dev": "cross-env NODE_ENV=development nodemon index.js",
-    "test": "cross-env NODE_ENV=test node --test",
+    "dev": "nodemon index.js",
+    "test": "node --test",
     "lint": "eslint"
   },
   "author": "Pablo Fernándenz <pablofp1988@hotmail.com>",
@@ -17,7 +16,6 @@
     "nodemon": "^3.1.4"
   },
   "dependencies": {
-    "cross-env": "^7.0.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
