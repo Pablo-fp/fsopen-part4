@@ -30,20 +30,20 @@ beforeEach(async () => {
   await blogObject.save();
 });
 
-test('blogs are returned as json', async () => {
+test.only('blogs are returned as json', async () => {
   await api
     .get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/);
 });
 
-test('there are two blogs', async () => {
+test.only('there are two blogs', async () => {
   const response = await api.get('/api/blogs');
 
-  assert.strictEqual(response.body.length, initialNotes.length);
+  assert.strictEqual(response.body.length, initialBlogs.length);
 });
 
-test('the first blog is about HTTP methods', async () => {
+test.only('the first blog is about HTTP methods', async () => {
   const response = await api.get('/api/blogs');
 
   const titles = response.body.map((e) => e.title);
