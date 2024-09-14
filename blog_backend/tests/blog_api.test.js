@@ -24,6 +24,16 @@ const initialBlogs = [
   }
 ];
 
+const blogsInDb = async () => {
+  const blogs = await Blog.find({});
+  return blogs.map((blog) => blog.toJSON());
+};
+
+const randomBlog = async () => {
+  const blogs = await blogsInDb();
+  return blogs[Math.floor(Math.random() * blogs.length)];
+};
+
 beforeEach(async () => {
   await Blog.deleteMany({});
   let blogObject = new Blog(initialBlogs[0]);
@@ -53,18 +63,57 @@ test.only('the first blog is about HTTP methods', async () => {
   assert(titles.includes('HTML is easy'));
 });
 
-test('blog posts contains id property', async () => {
-  const blogsInDb = async () => {
-    const blogs = await Blog.find({});
-    return blogs.map((blog) => blog.toJSON());
-  };
-  const randomBlog = async () => {
-    const blogs = await blogsInDb();
-    return blogs[Math.floor(Math.random() * blogs.length)];
-  };
-
+test.only('blog posts contains id property', async () => {
   const aBlog = await randomBlog();
   assert.ok(aBlog.id !== undefined, 'Blog post should have an id property');
+});
+
+test('successfully creates a new blog post', async () => {
+  const newBlog = {
+    url: 'https://github.com/Pablo-fp',
+    likes: 1000,
+    author: 'Pablo Fernandez',
+    title: 'A curious´s architect Github'
+  };
+
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect('Content-Type', /application\/json/);
+
+  assert(
+    response.status === 200 || response.status === 201,
+    `Expected status 200 or 201, got ${response.status}`
+  );
+
+  const blogsAfterSaving = await blogsInDb();
+  assert.strictEqual(
+    blogsAfterSaving.length,
+    initialBlogs.length + 1,
+    'Blog count should increase by 1'
+  );
+
+  const createdBlog = response.body;
+  assert.strictEqual(
+    createdBlog.title,
+    newBlog.title,
+    'Created blog should have the correct title'
+  );
+  assert.strictEqual(
+    createdBlog.author,
+    newBlog.author,
+    'Created blog should have the correct author'
+  );
+  assert.strictEqual(
+    createdBlog.url,
+    newBlog.url,
+    'Created blog should have the correct URL'
+  );
+  assert.strictEqual(
+    createdBlog.likes,
+    newBlog.likes,
+    'Created blog should have the correct number of likes'
+  );
 });
 
 after(async () => {
