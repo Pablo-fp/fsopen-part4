@@ -40,21 +40,30 @@ blogsRouter.delete('/:id', async (request, response) => {
   response.status(204).end();
 });
 
-blogsRouter.put('/:id', (request, response, next) => {
-  const body = request.body;
+blogsRouter.put('/:id', async (request, response) => {
+  const { author, url, likes, title } = request.body;
 
-  const blog = {
-    title: body.title,
-    author: body.author,
-    url: body.url,
-    likes: body.likes || 0
-  };
+  if (!author || !url || !title || !likes) {
+    return response.status(400).json({
+      error:
+        'make sure all required fields are sent (title, author, url, likes)'
+    });
+  }
 
-  Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
-    .then((updatedBlog) => {
-      response.json(updatedBlog);
-    })
-    .catch((error) => next(error));
+  const blog = { url, author, title, likes };
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
+    new: true,
+    runValidators: true,
+    context: 'query'
+  });
+
+  if (updatedBlog) {
+    response.status(201).json(updatedBlog);
+  } else {
+    response.status(400).json({
+      error: `No person with this id: '${request.params.id}'`
+    });
+  }
 });
 
 module.exports = blogsRouter;
