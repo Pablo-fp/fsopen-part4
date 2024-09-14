@@ -1,8 +1,10 @@
 const { test, after, beforeEach } = require('node:test');
+
 const assert = require('node:assert');
 const Blog = require('../models/blog');
 const mongoose = require('mongoose');
 const supertest = require('supertest');
+
 const app = require('../app');
 
 const api = supertest(app);
@@ -49,6 +51,20 @@ test.only('the first blog is about HTTP methods', async () => {
   const titles = response.body.map((e) => e.title);
   // is the argument truthy
   assert(titles.includes('HTML is easy'));
+});
+
+test('blog posts contains id property', async () => {
+  const blogsInDb = async () => {
+    const blogs = await Blog.find({});
+    return blogs.map((blog) => blog.toJSON());
+  };
+  const randomBlog = async () => {
+    const blogs = await blogsInDb();
+    return blogs[Math.floor(Math.random() * blogs.length)];
+  };
+
+  const aBlog = await randomBlog();
+  assert.ok(aBlog.id !== undefined, 'Blog post should have an id property');
 });
 
 after(async () => {
