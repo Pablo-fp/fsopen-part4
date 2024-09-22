@@ -4,9 +4,9 @@ const assert = require('node:assert');
 const Blog = require('../models/blog');
 const mongoose = require('mongoose');
 const supertest = require('supertest');
+const helper = require('./tests_helper');
 
 const app = require('../app');
-
 const api = supertest(app);
 
 const initialBlogs = [
@@ -23,16 +23,6 @@ const initialBlogs = [
     likes: 11
   }
 ];
-
-const blogsInDb = async () => {
-  const blogs = await Blog.find({});
-  return blogs.map((blog) => blog.toJSON());
-};
-
-const randomBlog = async () => {
-  const blogs = await blogsInDb();
-  return blogs[Math.floor(Math.random() * blogs.length)];
-};
 
 beforeEach(async () => {
   await Blog.deleteMany({});
@@ -64,7 +54,7 @@ test.only('the first blog is about HTTP methods', async () => {
 });
 
 test.only('blog posts contains id property', async () => {
-  const aBlog = await randomBlog();
+  const aBlog = await helper.randomBlog();
   assert.ok(aBlog.id !== undefined, 'Blog post should have an id property');
 });
 
@@ -86,7 +76,7 @@ test('successfully creates a new blog post', async () => {
     `Expected status 200 or 201, got ${response.status}`
   );
 
-  const blogsAfterSaving = await blogsInDb();
+  const blogsAfterSaving = await helper.blogsInDb();
   assert.strictEqual(
     blogsAfterSaving.length,
     initialBlogs.length + 1,
