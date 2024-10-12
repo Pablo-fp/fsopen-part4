@@ -5,7 +5,8 @@ content-type: application/json
     "title": "Prueba",
     "author": "Yo mismo",
     "url": "www.wikipedia.org",
-    "likes": "15"
+    "likes": "15",
+    "user": "66f7c332681ee493ac0ac633"
 }
 
 

@@ -12,10 +12,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Password is required']
   },
-  notes: [
+  blogs: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Note'
+      ref: 'Blog'
     }
   ]
 });
